@@ -7,12 +7,11 @@ public class startGame {
 
         HolsDerGeier hdg = new HolsDerGeier();
         AlexBotV3 a1 = new AlexBotV3();
-        GeierDenik a2 = new GeierDenik();
         EndbossBotPlus5 p1 = new EndbossBotPlus5();
         IntelligentererGeier g1 = new IntelligentererGeier();
         Random r1 = new Random();
 
-        hdg.neueSpieler(a2, a1);
+        hdg.neueSpieler(p1, a1);
 
         final int games = 10000;
 
