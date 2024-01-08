@@ -18,6 +18,8 @@ class AlexBotV3{
     + gibKarte()
     - strategyHandler()
 }
+class AlexBotV3
+note right: import Strategies.*
 
 package "Strategies" #DDDDDD{
     abstract class Astrategy{
