@@ -20,11 +20,6 @@ import Strategies.*;
     * <li> reset(): Initialisiert die Listen der eigenen, gegnerischen Karten und Punktekarten.
     * <li> gibKarte(): Hauptmethode, gibt letztlich die zu spielende Karte aus<br>
     * <li> updateLists(int nextPointCard): Aktualisiert die Arraylisten basierend auf der aktuellen Punktekarte.
-    * <li> playCard(int nextPointCard): Spielt eine Karte basierend auf der Strategie des Bots.
-    * <li> playSpecialCase1(int nextPointCard): Behandelt den speziellen Fall für Punktekarten 4 und 5.
-    * <li> playSpecialCase2(int nextPointCard): Behandelt den speziellen Fall für Punktekarten 9 und 10.
-    * <li> playMinCard(): Spielt die niedrigste verfügbare Karte aus der Liste der eigenen Karten.
-    * <li> playMaxCard(): Spielt die höchste verfügbare Karte aus der Liste der eigenen Karten.
  * </ul>
  */
 
@@ -67,7 +62,6 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
      *  Konstruktor für den AlexBotV3 - beim Instanziieren eines AlexBotV3-Objekts in der Startklasse, wird die Methode reset() aufgerufen.
      */
     public AlexBotV3() {
-        reset();
         currentStrategy = 0;
     }
 
@@ -110,7 +104,7 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
 
     private int strategyHandler(int nextPointCard){
 
-        //TODO: winPercantage berechnen und basieren darauf Strategie wehcseln und ggf. die gewinnbringendste Strategie speicher in einer "gerankten Liste/tabelle"
+        //TODO: winPercentage berechnen und basieren darauf Strategie wechseln und ggf. die gewinnbringendste Strategie speicher in einer "gerankten Liste/tabelle"
         // Variable currentStrategy ändern (z.B. einfach "0,1,2,3,4,0..." Zyklus)
         /*V1
         int retCard = 0;
@@ -157,7 +151,7 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
          */
 
         // V3
-//TODO Strategieaufrufe mit Paramtern füllen
+//TODO Strategieaufrufe mit Parametern füllen
         return switch (currentStrategy) {
             case 0 -> //Dynamic Mapped
                     dyn.playCard(pointsLeftInGame, myAvailableCards, enemyAvailableCards, nextPointCard);

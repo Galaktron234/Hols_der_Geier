@@ -32,7 +32,7 @@ public class CardManager {
     /*
     * Die Hilfsmethode cardIsAvailable() gibt an, ob die übergebene Karte noch auf der Hand liegt.
     */
-   boolean cardIsAvailable(ArrayList<Integer> myAvailableCards, int number) {
+    boolean cardIsAvailable(ArrayList<Integer> myAvailableCards, int number) {
        return myAvailableCards.contains(number);
    }
 

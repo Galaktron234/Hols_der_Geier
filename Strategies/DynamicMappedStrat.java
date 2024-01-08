@@ -4,6 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ *
+ * <b>Methodenübersicht der DynamicMapped Strategie</b>
+   <ul>
+ *      <li> playCard(ArrayList<Integer> pointsLeftInGame, ArrayList<Integer> myAvailableCards, ArrayList<Integer> enemyAvailableCards, int nextPointCard): Spielt eine Karte basierend auf der Strategie des Bots.
+ *      <li> playSpecialCase1(int nextPointCard): Behandelt den speziellen Fall für Punktekarten 4 und 5.
+ *      <li> playSpecialCase2(int nextPointCard): Behandelt den speziellen Fall für Punktekarten 9 und 10.
+ *      <li> playMinCard(): Spielt die niedrigste verfügbare Karte aus der Liste der eigenen Karten.
+ *      <li> playMaxCard(): Spielt die höchste verfügbare Karte aus der Liste der eigenen Karten.
+ *  </ul>
+ */
 public class DynamicMappedStrat extends Astrategy{
 
     public DynamicMappedStrat(){
