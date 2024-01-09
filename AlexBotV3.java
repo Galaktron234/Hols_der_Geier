@@ -34,13 +34,15 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
 
     /**
     *   Diese 3 Variablen sollen den Spielverlauf bzw. die bisherige Leistung von AlexBotV3 tracken und
-    *   anhand der relativen Anzahl an Siegen (wonGames/playedGames) Strategieänderungen vornehmen,
+    *   anhand der relativen Anzahl an Verlusten (lostGames/playedGames) sollen Strategieänderungen vorgenommen werden,
     *   um nicht bei einer verlustbringenden Strategie festzustecken.
     */
     private double playedGames;
-    private double wonGames;
-    private double winPercentage;
-    //Festgelegter Wert - unterschreitet winPercentage diesen Wert, ändert der StrategyHandler die Strategie von AlexBotV3
+    private double lostGames;
+    private double losePercentage;
+    /** Nach jeder Runde wird ein Gewinner ausgegeben, dieser wird in dieser Variable gespeichert*/
+    private String winnerOfLastRound;
+    /**Festgelegter Wert - überschreitet losePercentage diesen Wert, ändert der StrategyHandler die Strategie von AlexBotV3*/
     private final double strategyThreshold = 0.55;
     private int currentStrategy;
 
@@ -65,6 +67,9 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
         currentStrategy = 0;
     }
 
+    public void setWinnerOfLastRound(String winnerOfLastRound){
+        this.winnerOfLastRound = winnerOfLastRound;
+    }
     /**
     *  Die abstrakte Methode reset() aus der Klasse "HolsDerGeierSpieler" wird hier überschrieben.<br>
     *  Zuerst werden alle Arraylisten zurückgesetzt, danach wieder mit den Punkte-/Spielerkarten befüllt.
@@ -106,6 +111,16 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
 
         //TODO: winPercentage berechnen und basieren darauf Strategie wechseln und ggf. die gewinnbringendste Strategie speicher in einer "gerankten Liste/tabelle"
         // Variable currentStrategy ändern (z.B. einfach "0,1,2,3,4,0..." Zyklus)
+
+        // Wenn es einen Gewinner aus der letzten Runde gibt und es der Gegner war, wird die Variable lostGames
+        if(winnerOfLastRound != null && !winnerOfLastRound.equals(this.getClass().getSimpleName())){
+            //TODO: Formel für losePercentage und tracking von Games insgesammt
+        }
+
+        if(losePercentage > strategyThreshold){
+            //TODO: Change currentStrategy
+        }
+
         /*V1
         int retCard = 0;
         switch (currentStrategy){

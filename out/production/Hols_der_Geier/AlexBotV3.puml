@@ -1,28 +1,64 @@
+//TODO: Erstmal copy as PlantUML Server Link, danach BIld kopieren
 @startuml
 'https://plantuml.com/class-diagram
 
 abstract class HolsDerGeierSpieler
-abstract class Astrategy
+
+
+class AlexBotV3{
+    - myAvailableCards: ArrayList<Integer>
+    - enemyAvailableCards: ArrayList<Integer>
+    - pointsLeftInGame: ArrayList<Integer>
+    - playedGames: double
+    - wonGames: double
+    - winPercentage: double
+    - strategyThreshold: double
+    - currentStrategy: int
+    + reset()
+    + gibKarte()
+    - strategyHandler()
+}
 class AlexBotV3
-class CardManager
-class Aggressive
-class Defensive
-class DynamicMapped
-class Random
-class StaticMapped
+note right: import Strategies.*
 
+package "Strategies" #DDDDDD{
+    abstract class Astrategy{
+         # cm: CardManager
+         # {abstract} playCard(): int
+    }
+    class CardManager{
+        + updateLists()
+        # cardIsAvailable(): boolean
+        # enemyCardExists(): boolean
+        # removeCard(): int
+    }
 
-HolsDerGeierSpieler <|---- AlexBotV3
+    class AggressiveStrat
+    class DefensiveStrat
+    class DynamicMappedStrat{
+        + playCard():int
+        - playSpecialCase1(): int
+        - playSpecialCase2(): int
+        - playMinCard(): int
+        - playMaxCard(): int
+    }
+
+    class RandomStrat
+    class StaticMappedStrat
+}
+
+HolsDerGeierSpieler <|- AlexBotV3
+CardManager<-Astrategy
 CardManager <- AlexBotV3
-Astrategy <|-- Aggressive
-Astrategy <|-- Defensive
-Astrategy <|-- DynamicMapped
-Astrategy <|-- StaticMapped
-Astrategy <|-- Random
-Aggressive <--- AlexBotV3
-Defensive <--- AlexBotV3
-DynamicMapped <--- AlexBotV3
-StaticMapped <--- AlexBotV3
-Random <--- AlexBotV3
+Astrategy <|-- AggressiveStrat
+Astrategy <|-- DefensiveStrat
+Astrategy <|-- DynamicMappedStrat
+Astrategy <|-- StaticMappedStrat
+Astrategy <|-- RandomStrat
+AggressiveStrat <--- AlexBotV3
+DefensiveStrat <--- AlexBotV3
+DynamicMappedStrat <--- AlexBotV3
+StaticMappedStrat <--- AlexBotV3
+RandomStrat <--- AlexBotV3
 
 @enduml

@@ -17,8 +17,8 @@ public class startGame {
 
 
         for(int i = 0; i < games; i++) {
-            hdg.ganzesSpiel();
-            System.out.println("-------------------------------------");
+            String gewinner = hdg.ganzesSpiel();
+            a1.setWinnerOfLastRound(gewinner);
         }
         hdg.getSpieler();
         System.out.println("Punktestand: \n Spieler 1: " + punkte1 + "\n Spieler 2: " + punkte2);
