@@ -1,6 +1,7 @@
 public class startGame {
     public static int punkte1 = 0;
     public static int punkte2 = 0;
+    public static int draw = 0;
     public static void main(String[] args) throws Exception {
 
 
@@ -11,17 +12,17 @@ public class startGame {
         IntelligentererGeier g1 = new IntelligentererGeier();
         Random r1 = new Random();
 
-        hdg.neueSpieler(a1, r1);
+        hdg.neueSpieler(a1, p1);
 
         final int games = 1000;
 
 
         for(int i = 0; i < games; i++) {
             String gewinner = hdg.ganzesSpiel();
-            System.out.println("gewinnner: " + gewinner);
             a1.setWinnerOfLastRound(gewinner);
         }
-        hdg.getSpieler();
-        System.out.println("Punktestand: \n Spieler 1: " + punkte1 + "\n Spieler 2: " + punkte2);
+        System.out.println("---------------------------\n" +
+                "Punktestand: \n Spieler 1: " + punkte1 + "\n Spieler 2: " + punkte2
+                + "\n Draw: " + draw);
     }
 }

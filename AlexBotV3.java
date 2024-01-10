@@ -130,8 +130,6 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
             losePercentage = 0;
         }
 
-        System.out.println("Current Strategy: " + currentStrategy);
-
         /*
          * Die folgenden 3 switch-cases sollen darstellen, wie das gleiche Problem auf drei verschiedene Arten gelöst werden kann, wobei der Output bei allen drei gleich bleibt.
          */

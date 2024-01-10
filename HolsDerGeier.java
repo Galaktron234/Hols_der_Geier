@@ -28,9 +28,6 @@ public class HolsDerGeier {
     /* Das ist die Referenz Ihr Objekt */
     private HolsDerGeierSpieler[] spieler;
 
-    public void getSpieler(){
-        Arrays.stream(spieler).forEach(g -> System.out.println(g.getClass().getSimpleName()));
-    }
 
 
 
@@ -192,13 +189,16 @@ public class HolsDerGeier {
         }
 
         if (punktstaende[0] > punktstaende[1]) {
+            startGame.punkte1++;
             return spieler[0].getClass().getSimpleName();
 
         }
         else if (punktstaende[0] < punktstaende[1]){
+            startGame.punkte2++;
             return spieler[1].getClass().getSimpleName();
         }
         else {
+            startGame.draw++;
             return null;
         }
     }
