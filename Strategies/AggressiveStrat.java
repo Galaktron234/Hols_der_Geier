@@ -16,9 +16,6 @@ import java.util.Random;
  */
 public class AggressiveStrat extends Astrategy{
     private final Random random = new Random();
-    public AggressiveStrat(){
-        this.cm = new CardManager();
-    }
 
     @Override
     public int playCard(ArrayList<Integer> myAvailableCards, int nextPointCard) {
@@ -32,15 +29,15 @@ public class AggressiveStrat extends Astrategy{
 
         // Falls die Zahl kleiner 7 ist (also eine Wahrscheinlichkeit von 70 %), wird die höchste verfügbare Karte gelegt.
         if (decision < 7) {
-            return  cm.playMaxCard(myAvailableCards);
+            return  CardManager.playMaxCard(myAvailableCards);
         }
         // Falls die Zahl zwischen 7 und 8 liegt (also eine Wahrscheinlichkeit von 20 %), wird eine zufällige Karte gelegt.
         else if (decision < 9){
-            return cm.playRandomCard(myAvailableCards);
+            return CardManager.playRandomCard(myAvailableCards);
         }
         // Andernfalls (restliche 10 %) wird die niedrigste Karte gelegt.
         else{
-            return cm.playMinCard(myAvailableCards);
+            return CardManager.playMinCard(myAvailableCards);
         }
     }
 

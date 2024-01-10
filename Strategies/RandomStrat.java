@@ -17,12 +17,7 @@ import java.util.Random;
  */
 
 public class RandomStrat extends Astrategy{
-
     private final Random random = new Random();
-
-    public RandomStrat(){
-        this.cm = new CardManager();
-    }
 
     @Override
     public int playCard(ArrayList<Integer> myAvailableCards, int nextPointCard) {
@@ -63,10 +58,10 @@ public class RandomStrat extends Astrategy{
             // Die Varianz wird erhöht, falls die gewählte Karte nicht mehr auf der Hand liegt.
             varianz++;
 
-        } while (!cm.cardIsAvailable(myAvailableCards, retCard)); //Der Zahlenbereich wird so lang vergrößert, bis eine Karte gewählt wird, die noch auf der Hand liegt.
+        } while (!CardManager.cardIsAvailable(myAvailableCards, retCard)); //Der Zahlenbereich wird so lang vergrößert, bis eine Karte gewählt wird, die noch auf der Hand liegt.
 
         //Am Ende wird die Karte mithilfe der Hilfsmethode removeCard() zurückgegeben.
-        return cm.removeCard(myAvailableCards, retCard);
+        return CardManager.removeCard(myAvailableCards, retCard);
     }
 
 

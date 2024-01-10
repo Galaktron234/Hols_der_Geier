@@ -1,11 +1,7 @@
 import java.util.ArrayList;
 import java.util.Random;
-
 import Strategies.*;
-/* TODO:
-    - LosePercentage wird nach jeder Runde nicht Game aktualisiert
-    - Code stellen in PPT einfügen
- */
+
 /**
  * Der AlexBotV3 versucht, seine Erfolgshistorie nachzuverfolgen und basierend darauf, eine Strategie auszuwählen, welche gewinnbringender ist, als die Aktuelle.
  * <p>
@@ -53,11 +49,6 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
     private final RandomStrat rand = new RandomStrat();
 
     /**
-     * Ein Objekt der Klasse CardManager wird instanziiert, um auf die Hilfsmethoden für die Karten zuzugreifen.
-     */
-    CardManager cm = new CardManager();
-
-    /**
      *  Konstruktor für den AlexBotV3 - beim Instanziieren eines AlexBotV3-Objekts in der Startklasse, wird die Methode reset() aufgerufen.
      */
     public AlexBotV3() {
@@ -80,24 +71,27 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
     */
     @Override
     public void reset() {
+        //Nach jedem Rundenstart wird playedGames inkriminiert.
         playedGames++;
+
+        //Die Arraylisten werden geleert.
         enemyAvailableCards.clear();
         myAvailableCards.clear();
         pointsLeftInGame.clear();
 
-        //Spielerkarten
+        //Spieler-/Gegnerkarten werden befüllt. Karten 1 bis 15
         for (int i = 1; i <= 15; i++) {
             enemyAvailableCards.add(i);
             myAvailableCards.add(i);
         }
-        //Punktekarten
+        //Punktekarten werden befüllt. Karten -5 bis 10
         for (int i = -5; i <= 10; i++) {
             if (i != 0) {
                 pointsLeftInGame.add(i);
             }
         }
 
-        // Wenn der Gegner das letzte Spiel gewonnen hat, wird lostGames inkrementiert und die neue losePercentage berechnet
+        // Wenn der Gegner das letzte Spiel gewonnen hat, wird lostGames inkrementiert und die neue losePercentage berechnet.
         if(winnerOfLastRound != null && !winnerOfLastRound.equals(this.getClass().getSimpleName())){
             lostGames++;
             losePercentage = lostGames/playedGames;
@@ -112,25 +106,24 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
      */
     @Override
     public int gibKarte(int nextPointCard) {
-        cm.updateLists(pointsLeftInGame,enemyAvailableCards,letzterZug(),nextPointCard);
+        CardManager.updateLists(pointsLeftInGame,enemyAvailableCards,letzterZug(),nextPointCard);
         return strategyHandler(nextPointCard);
     }
 
+    /**
+     * Der StrategyHandler ist das Herz vom AlexBotV3 - hier wird entschieden welche Taktik gespielt wird, um den Gegner bestmöglich zu kontern.  <br>
+     * Einziger Nachteil ist, dass der Bot, bei wenigen Spielen, die zu passende Taktik sehr ungenau auswählt (zu wenige Daten für Entscheidung).
+     */
     private int strategyHandler(int nextPointCard){
-        System.out.println("losePercentage: " + losePercentage);
-        System.out.println("lostGames: " + lostGames);
-        System.out.println("playedGames: " + playedGames);
-
         //Festgelegter Wert (kann an Bedürfnisse angepasst werden) - überschreitet losePercentage diesen Wert, ändert der StrategyHandler die Strategie von AlexBotV3
         final double STRATEGY_THRESHOLD = 0.5;
-
-
 
         /*
          * Wenn die Verlustwahrscheinlichkeit die ertragbare Verlustwahrscheinlichkeit übersteigt und dies im Rahmen von mehreren Spielen passiert (gemäß dem Gesetz der großen Zahlen),
          * ist die aktuelle Strategie wohl nicht gewinnbringend und muss geändert werden.
          */
         if(losePercentage > STRATEGY_THRESHOLD && playedGames > 50){
+            //Strategie wird inkrementiert; durch den Modulo Operator bleibt der Counter im Bereich von 1-5.
             currentStrategy = (currentStrategy % 5) +1;
             lostGames = 0;
             playedGames = 0;

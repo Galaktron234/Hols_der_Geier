@@ -15,10 +15,6 @@ import java.util.Collections;
  */
 public class DynamicMappedStrat extends Astrategy{
 
-    public DynamicMappedStrat(){
-        this.cm = new CardManager();
-    }
-
     /**
      * Diese Methode wird nicht benutzt, da wir die playCard() Methode mit 4 Parametern brauchen.
      */
@@ -43,7 +39,7 @@ public class DynamicMappedStrat extends Astrategy{
          * mit contains() wird überprüft, ob die aufgedeckte Karte in dieser Liste ist.
          */
         if (Arrays.asList(-5, -4, -3, -2, -1, 1, 2, 3).contains(nextPointCard)) {
-            return cm.playMinCard(myAvailableCards);
+            return CardManager.playMinCard(myAvailableCards);
         }
         /*
          * Wenn die aufgedeckte Karte eine 4 oder 5 ist, wird die Methode playSpecialCase1() aufgerufen
@@ -55,7 +51,7 @@ public class DynamicMappedStrat extends Astrategy{
          * Wenn die aufgedeckte Karte eine 6,7 oder 8 ist, wird die Methode playMaxCard() aufgerufen
          */
         else if (Arrays.asList(6, 7, 8).contains(nextPointCard)) {
-            return cm.playMaxCard(myAvailableCards);
+            return CardManager.playMaxCard(myAvailableCards);
         }
         /*
          * Wenn die Bedingungen davor nicht erfüllt wurden, heißt es, dass die aufgedeckte Karte 9 oder 10 ist.
@@ -89,14 +85,14 @@ public class DynamicMappedStrat extends Astrategy{
         if (maxCard == nextPointCard) {
             for (int i = 0; i <= 3; i++) {
                 int card = nextPointCard * 3 - i;
-                if (cm.cardIsAvailable(myAvailableCards,card)) {
-                    return cm.removeCard(myAvailableCards,card);
+                if (CardManager.cardIsAvailable(myAvailableCards,card)) {
+                    return CardManager.removeCard(myAvailableCards,card);
                 }
             }
         }
 
         /* Wenn die gewünschten Karten nicht mehr auf der hand liegen, wird mit Hilfe playMinCard() die niedrigste verfügbare Karte ausgespielt. */
-        return cm.playMinCard(myAvailableCards);
+        return CardManager.playMinCard(myAvailableCards);
     }
 
     /**
@@ -111,14 +107,14 @@ public class DynamicMappedStrat extends Astrategy{
          *  und mit der Hilfsmethode enemyCardExists wird überprüft ob der Gegner die 14 und 15 nicht mehr im Deck hat.
          *  Wenn ja, wird die Hilfsmethode removeCard() aufgerufen.
          */
-        if (cm.cardIsAvailable(myAvailableCards, card) && !cm.enemyCardExists(enemyAvailableCards, 14) && !cm.enemyCardExists(enemyAvailableCards,15)) {
-            return cm.removeCard(myAvailableCards, card);
+        if (CardManager.cardIsAvailable(myAvailableCards, card) && !CardManager.enemyCardExists(enemyAvailableCards, 14) && !CardManager.enemyCardExists(enemyAvailableCards,15)) {
+            return CardManager.removeCard(myAvailableCards, card);
         }
         /*
          * Wenn wir die 14 bzw. 15 nicht haben oder der Gegner die 14 bzw 15 noch nicht ausgespielt hat,
          * wird die niedrigste Karte ausgespielt.
          */
-        return cm.playMinCard(myAvailableCards);
+        return CardManager.playMinCard(myAvailableCards);
     }
 
 
