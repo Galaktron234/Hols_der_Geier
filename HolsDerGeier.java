@@ -193,9 +193,13 @@ public class HolsDerGeier {
 
         if (punktstaende[0] > punktstaende[1]) {
             return spieler[0].getClass().getSimpleName();
+
         }
-        else{
+        else if (punktstaende[0] < punktstaende[1]){
             return spieler[1].getClass().getSimpleName();
+        }
+        else {
+            return null;
         }
     }
 

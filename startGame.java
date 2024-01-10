@@ -11,9 +11,9 @@ public class startGame {
         IntelligentererGeier g1 = new IntelligentererGeier();
         Random r1 = new Random();
 
-        hdg.neueSpieler(a1, p1);
+        hdg.neueSpieler(a1, r1);
 
-        final int games = 10;
+        final int games = 1000;
 
 
         for(int i = 0; i < games; i++) {

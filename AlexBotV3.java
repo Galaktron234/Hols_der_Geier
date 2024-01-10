@@ -40,8 +40,7 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
     private double losePercentage;
     /** Nach jeder Runde wird ein Gewinner ausgegeben, dieser wird in dieser Variable gespeichert*/
     private String winnerOfLastRound;
-    /**Festgelegter Wert - überschreitet losePercentage diesen Wert, ändert der StrategyHandler die Strategie von AlexBotV3*/
-    private final double strategyThreshold = 0.55;
+
     private int currentStrategy;
 
     /**
@@ -68,9 +67,13 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
         losePercentage = 0;
     }
 
+    /**
+     * Mithilfe der Methode setWinnerOfLastRound() kann die Rückgabe der HolsDerGeier ganzesSpiel()-Methode gespeichert werden.
+     */
     public void setWinnerOfLastRound(String winnerOfLastRound){
         this.winnerOfLastRound = winnerOfLastRound;
     }
+
     /**
     *  Die abstrakte Methode reset() aus der Klasse "HolsDerGeierSpieler" wird hier überschrieben.<br>
     *  Zuerst werden alle Arraylisten zurückgesetzt, danach wieder mit den Punkte-/Spielerkarten befüllt.
@@ -93,6 +96,12 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
                 pointsLeftInGame.add(i);
             }
         }
+
+        // Wenn der Gegner das letzte Spiel gewonnen hat, wird lostGames inkrementiert und die neue losePercentage berechnet
+        if(winnerOfLastRound != null && !winnerOfLastRound.equals(this.getClass().getSimpleName())){
+            lostGames++;
+            losePercentage = lostGames/playedGames;
+        }
     }
 
     /**
@@ -107,29 +116,29 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
         return strategyHandler(nextPointCard);
     }
 
-
-
     private int strategyHandler(int nextPointCard){
+        System.out.println("losePercentage: " + losePercentage);
+        System.out.println("lostGames: " + lostGames);
+        System.out.println("playedGames: " + playedGames);
 
-        // Wenn der Gegner das letzte Spiel gewonnen hat, wird lostGames inkrementiert und die neue losePercentage berechnet
-        if(winnerOfLastRound != null && !winnerOfLastRound.equals(this.getClass().getSimpleName())){
-            lostGames++;
-            losePercentage = lostGames/playedGames;
-            System.out.println("losePercentage: " + losePercentage);
-        }
+        //Festgelegter Wert (kann an Bedürfnisse angepasst werden) - überschreitet losePercentage diesen Wert, ändert der StrategyHandler die Strategie von AlexBotV3
+        final double STRATEGY_THRESHOLD = 0.5;
+
+
 
         /*
          * Wenn die Verlustwahrscheinlichkeit die ertragbare Verlustwahrscheinlichkeit übersteigt und dies im Rahmen von mehreren Spielen passiert (gemäß dem Gesetz der großen Zahlen),
          * ist die aktuelle Strategie wohl nicht gewinnbringend und muss geändert werden.
          */
-
-        if(losePercentage > strategyThreshold && playedGames > 50){
+        if(losePercentage > STRATEGY_THRESHOLD && playedGames > 50){
             currentStrategy = (currentStrategy % 5) +1;
             lostGames = 0;
             playedGames = 0;
+            losePercentage = 0;
         }
 
         System.out.println("Current Strategy: " + currentStrategy);
+
         /*
          * Die folgenden 3 switch-cases sollen darstellen, wie das gleiche Problem auf drei verschiedene Arten gelöst werden kann, wobei der Output bei allen drei gleich bleibt.
          */
@@ -158,7 +167,6 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
                 break;
         }
         return retCard;
-
 
         V2:
         int retCard = switch (currentStrategy) {

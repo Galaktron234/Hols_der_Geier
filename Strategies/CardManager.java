@@ -70,6 +70,10 @@ public class CardManager {
         return removeCard(myAvailableCards, Collections.max(myAvailableCards));
     }
 
+    /**
+     * In der Methode playRandomCard() wird eine zufällige noch verfügbare Karte an die Hilfsmethode
+     * removeCard() übergeben.
+     */
     int playRandomCard(ArrayList<Integer> myAvailableCards){
         return removeCard(myAvailableCards, myAvailableCards.get(random.nextInt(myAvailableCards.size())));
     }
