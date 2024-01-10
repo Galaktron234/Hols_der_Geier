@@ -17,9 +17,6 @@ import java.util.Random;
  *      <li> playCard(ArrayList<Integer> pointsLeftInGame, ArrayList<Integer> myAvailableCards, ArrayList<Integer> enemyAvailableCards, int nextPointCard): Spielt eine Karte basierend auf der defensiven Natur der Strategie
  </ul>
  */
-
-
-
 public class DefensiveStrat extends Astrategy{
     private final Random random = new Random();
 
