@@ -11,13 +11,14 @@ public class startGame {
         IntelligentererGeier g1 = new IntelligentererGeier();
         Random r1 = new Random();
 
-        hdg.neueSpieler(p1, a1);
+        hdg.neueSpieler(a1, p1);
 
-        final int games = 10000;
+        final int games = 10;
 
 
         for(int i = 0; i < games; i++) {
             String gewinner = hdg.ganzesSpiel();
+            System.out.println("gewinnner: " + gewinner);
             a1.setWinnerOfLastRound(gewinner);
         }
         hdg.getSpieler();

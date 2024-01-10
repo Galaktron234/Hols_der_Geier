@@ -8,11 +8,9 @@ import java.util.Collections;
  *
  * <b>Methodenübersicht der DynamicMapped Strategie</b>
    <ul>
- *      <li> playCard(ArrayList<Integer> pointsLeftInGame, ArrayList<Integer> myAvailableCards, ArrayList<Integer> enemyAvailableCards, int nextPointCard): Spielt eine Karte basierend auf der Strategie des Bots.
+ *      <li> playCard(ArrayList<Integer> pointsLeftInGame, ArrayList<Integer> myAvailableCards, ArrayList<Integer> enemyAvailableCards, int nextPointCard): Spielt eine Karte basierend auf der aufgedeckten Punktekarte
  *      <li> playSpecialCase1(int nextPointCard): Behandelt den speziellen Fall für Punktekarten 4 und 5.
  *      <li> playSpecialCase2(int nextPointCard): Behandelt den speziellen Fall für Punktekarten 9 und 10.
- *      <li> playMinCard(): Spielt die niedrigste verfügbare Karte aus der Liste der eigenen Karten.
- *      <li> playMaxCard(): Spielt die höchste verfügbare Karte aus der Liste der eigenen Karten.
  *  </ul>
  */
 public class DynamicMappedStrat extends Astrategy{
@@ -36,7 +34,7 @@ public class DynamicMappedStrat extends Astrategy{
     public int playCard(ArrayList<Integer> pointsLeftInGame, ArrayList<Integer> myAvailableCards, ArrayList<Integer> enemyAvailableCards, int nextPointCard) {
         // Wenn es nur eine übrige Karte gibt, wird diese ausgespielt.
         if (myAvailableCards.size() == 1) {
-            return myAvailableCards.get(0);
+            return myAvailableCards.getFirst();
         }
         /*
          * Wenn die aufgedeckte Karte, eine Karte zwischen -5 und 3 ist,
@@ -45,7 +43,7 @@ public class DynamicMappedStrat extends Astrategy{
          * mit contains() wird überprüft, ob die aufgedeckte Karte in dieser Liste ist.
          */
         if (Arrays.asList(-5, -4, -3, -2, -1, 1, 2, 3).contains(nextPointCard)) {
-            return playMinCard(myAvailableCards);
+            return cm.playMinCard(myAvailableCards);
         }
         /*
          * Wenn die aufgedeckte Karte eine 4 oder 5 ist, wird die Methode playSpecialCase1() aufgerufen
@@ -57,10 +55,10 @@ public class DynamicMappedStrat extends Astrategy{
          * Wenn die aufgedeckte Karte eine 6,7 oder 8 ist, wird die Methode playMaxCard() aufgerufen
          */
         else if (Arrays.asList(6, 7, 8).contains(nextPointCard)) {
-            return playMaxCard(myAvailableCards);
+            return cm.playMaxCard(myAvailableCards);
         }
         /*
-         * Wenn die Bedingungen davor nicht erfüllt wurden, heißt es das die aufgedeckte Karte 9 oder 10 ist.
+         * Wenn die Bedingungen davor nicht erfüllt wurden, heißt es, dass die aufgedeckte Karte 9 oder 10 ist.
          * Es wird die zweite spezielle Strategie benutzt und playSpecialCase2() aufgerufen
          */
         else{
@@ -73,8 +71,10 @@ public class DynamicMappedStrat extends Astrategy{
      */
     private int playSpecialCase1(ArrayList<Integer> pointsLeftInGame, ArrayList<Integer> myAvailableCards, int nextPointCard) {
 
-        // Mit der Methode Collections.max() wird überprüft,
-        // welche die höchste verbleibende Punktekarte im Spiel (bzw. im Punktekartenstapel) ist
+        /*
+        * Mit der Methode Collections.max() wird überprüft,
+        * welche die höchste verbleibende Punktekarte im Spiel (bzw. im Punktekartenstapel) ist
+        */
         int maxCard = Collections.max(pointsLeftInGame);
 
         /*
@@ -96,11 +96,11 @@ public class DynamicMappedStrat extends Astrategy{
         }
 
         /* Wenn die gewünschten Karten nicht mehr auf der hand liegen, wird mit Hilfe playMinCard() die niedrigste verfügbare Karte ausgespielt. */
-        return playMinCard(myAvailableCards);
+        return cm.playMinCard(myAvailableCards);
     }
 
     /**
-     * Die Methode playSpecialCase2 behandelt den Fall "9 oder 10 aufgedeckt"y
+     * Die Methode playSpecialCase2 behandelt den Fall "9 oder 10 aufgedeckt"
      */
     private int playSpecialCase2(ArrayList<Integer> myAvailableCards, ArrayList<Integer> enemyAvailableCards, int nextPointCard) {
         // Im optimalen Fall, soll bei den höchsten Punktekarten, die höchsten Karten ausgespielt werden.
@@ -118,24 +118,10 @@ public class DynamicMappedStrat extends Astrategy{
          * Wenn wir die 14 bzw. 15 nicht haben oder der Gegner die 14 bzw 15 noch nicht ausgespielt hat,
          * wird die niedrigste Karte ausgespielt.
          */
-        return playMinCard(myAvailableCards);
+        return cm.playMinCard(myAvailableCards);
     }
 
-    /**
-     * In der Methode playMinCard() wird unsere niedrigste noch verfügbare Karte an die Hilfsmethode
-     * removeCard() übergeben.
-     */
-    private int playMinCard(ArrayList<Integer> myAvailableCards) {
-        return cm.removeCard(myAvailableCards, Collections.min(myAvailableCards));
-    }
 
-    /**
-     * In der Methode playMinCard() wird unsere höchste noch verfügbare Karte an die Hilfsmethode
-     * removeCard() übergeben.
-     */
-    private int playMaxCard(ArrayList<Integer> myAvailableCards) {
-        return cm.removeCard(myAvailableCards, Collections.max(myAvailableCards));
-    }
 
 
 }

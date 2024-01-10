@@ -3,10 +3,8 @@ import java.util.Random;
 
 import Strategies.*;
 /* TODO:
-    - Dokumentation/Kommentare
-    - Strategy Handler und Logik, nach wie vielen Spielen Strategie gewechselt wird
-    - verschiedene Strategien erstellen (Random, chance-aggressiv, chance-defensiv, dynamik-mapped, static-mapped)
-    - Grafiken erstellen --> Mappings
+    - LosePercentage wird nach jeder Runde nicht Game aktualisiert
+    - Code stellen in PPT einfügen
  */
 /**
  * Der AlexBotV3 versucht, seine Erfolgshistorie nachzuverfolgen und basierend darauf, eine Strategie auszuwählen, welche gewinnbringender ist, als die Aktuelle.
@@ -64,7 +62,10 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
      *  Konstruktor für den AlexBotV3 - beim Instanziieren eines AlexBotV3-Objekts in der Startklasse, wird die Methode reset() aufgerufen.
      */
     public AlexBotV3() {
-        currentStrategy = 0;
+        currentStrategy = 1;
+        lostGames = 0;
+        playedGames = 0;
+        losePercentage = 0;
     }
 
     public void setWinnerOfLastRound(String winnerOfLastRound){
@@ -76,6 +77,7 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
     */
     @Override
     public void reset() {
+        playedGames++;
         enemyAvailableCards.clear();
         myAvailableCards.clear();
         pointsLeftInGame.clear();
@@ -94,10 +96,10 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
     }
 
     /**
-     *  Die abstrakte Klasse gibKarte() aus der Klasse "HolsDerGeierSpieler" wird hier überschrieben.<br>
-     *  Zunächst werden mit dem Methodenaufruf updateLists() und dem Eingabeparameter nextPointCard (also die aufgedeckte Karte)
-     *  die Listen aktualisiert, welche den Spielverlauf tracken.<br>
-     *  Danach wird die eigentliche Karte zurückgegeben, in dem man playCard() mit dem Parameter nextPointCard aufruft.
+     *  Die abstrakte Klasse gibKarte() aus der Klasse "HolsDerGeierSpieler" wird hier überschrieben.<br><br>
+     *  Zunächst werden mit dem Methodenaufruf updateLists() mit den Eingabeparametern pointsLeftInGame (Arrayliste; verbleibende Punktekarten), enemyAvailableCards (Arraylist; verbleibende Gegnerkarten),
+     *  letzterZug() (int; die letzte gegnerische Karte) und nextPointCard (int; aufgedeckte Karte) die Listen aktualisiert, welche den Spielverlauf tracken.<br><br>
+     *  Danach wird der Strategy Handler aufgerufen, der basierend auf der aktuellen Strategie eine Karte zurückgibt.
      */
     @Override
     public int gibKarte(int nextPointCard) {
@@ -109,79 +111,91 @@ public class AlexBotV3 extends HolsDerGeierSpieler {
 
     private int strategyHandler(int nextPointCard){
 
-        //TODO: winPercentage berechnen und basieren darauf Strategie wechseln und ggf. die gewinnbringendste Strategie speicher in einer "gerankten Liste/tabelle"
-        // Variable currentStrategy ändern (z.B. einfach "0,1,2,3,4,0..." Zyklus)
-
-        // Wenn es einen Gewinner aus der letzten Runde gibt und es der Gegner war, wird die Variable lostGames
+        // Wenn der Gegner das letzte Spiel gewonnen hat, wird lostGames inkrementiert und die neue losePercentage berechnet
         if(winnerOfLastRound != null && !winnerOfLastRound.equals(this.getClass().getSimpleName())){
-            //TODO: Formel für losePercentage und tracking von Games insgesammt
+            lostGames++;
+            losePercentage = lostGames/playedGames;
+            System.out.println("losePercentage: " + losePercentage);
         }
 
-        if(losePercentage > strategyThreshold){
-            //TODO: Change currentStrategy
+        /*
+         * Wenn die Verlustwahrscheinlichkeit die ertragbare Verlustwahrscheinlichkeit übersteigt und dies im Rahmen von mehreren Spielen passiert (gemäß dem Gesetz der großen Zahlen),
+         * ist die aktuelle Strategie wohl nicht gewinnbringend und muss geändert werden.
+         */
+
+        if(losePercentage > strategyThreshold && playedGames > 50){
+            currentStrategy = (currentStrategy % 5) +1;
+            lostGames = 0;
+            playedGames = 0;
         }
 
-        /*V1
+        System.out.println("Current Strategy: " + currentStrategy);
+        /*
+         * Die folgenden 3 switch-cases sollen darstellen, wie das gleiche Problem auf drei verschiedene Arten gelöst werden kann, wobei der Output bei allen drei gleich bleibt.
+         */
+        /* V1:
         int retCard = 0;
         switch (currentStrategy){
-            case 0: //Dynamic Mapped
+            case 1: //Dynamic Mapped
                 //Strategieaufruf von Klasse DynamicMapped
                 retCard = dyn.playCard(pointsLeftInGame,myAvailableCards,enemyAvailableCards,nextPointCard);
                 break;
-            case 1: //Static Mapped
+            case 2: //Static Mapped
                 //Strategieaufruf von Klasse StaticMapped
                 retCard = stat.playCard();
                 break;
-            case 2: //Aggressive
+            case 3: //Aggressive
                 //Strategieaufruf von Klasse Aggressive
                 retCard = aggr.playCard();
                 break;
-            case 3: //Defensive
+            case 4: //Defensive
                 //Strategieaufruf von Klasse Defensive
                 retCard = def.playCard();
                 break;
-            case 4: //Random
+            case 5: //Random
                 //Strategieaufruf von Klasse Random
                 retCard = rand.playCard();
                 break;
         }
         return retCard;
 
-        */
-        /* V2
+
+        V2:
         int retCard = switch (currentStrategy) {
-            case 0 -> //Dynamic Mapped
+            case 1 -> //Dynamic Mapped
                     dyn.playCard(pointsLeftInGame, myAvailableCards, enemyAvailableCards, nextPointCard);
-            case 1 -> //Static Mapped
+            case 2 -> //Static Mapped
                     stat.playCard();
-            case 2 -> //Aggressive
+            case 3 -> //Aggressive
                     aggr.playCard();
-            case 3 -> //Defensive
+            case 4 -> //Defensive
                     def.playCard();
-            case 4 -> //Random
+            case 5 -> //Random
                     rand.playCard();
-            default -> 0;
+            default -> 1;
         };
         return retCard;
+        */
+
+        /* V3:
+         * Hier wird auf Basis des aktuellen Wertes der Variable currentStrategy die playCard()-Methode der jeweiligen Strategie aufgerufen und der int zurückgegeben.
          */
-
-        // V3
-//TODO Strategieaufrufe mit Parametern füllen
         return switch (currentStrategy) {
-            case 0 -> //Dynamic Mapped
+            case 1 -> //Dynamic Mapped
                     dyn.playCard(pointsLeftInGame, myAvailableCards, enemyAvailableCards, nextPointCard);
-           /* case 1 -> //Static Mapped
-                   stat.playCard();
-            case 2 -> //Aggressive
-                    aggr.playCard();
-            case 3 -> //Defensive
-                    def.playCard();
-            case 4 -> //Random
-                    rand.playCard();*/
-            default -> 0;
+            case 2 -> //Static Mapped
+                   stat.playCard(myAvailableCards, nextPointCard);
+            case 3 -> //Aggressive
+                    aggr.playCard(myAvailableCards, nextPointCard);
+            case 4 -> //Defensive
+                    def.playCard(myAvailableCards, nextPointCard);
+            case 5 -> //Random
+                    rand.playCard(myAvailableCards, nextPointCard);
+            default -> dyn.playCard(pointsLeftInGame, myAvailableCards, enemyAvailableCards, nextPointCard);
         };
-
     }
+
+
 
 
 

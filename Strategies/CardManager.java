@@ -1,10 +1,12 @@
 package Strategies;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 public class CardManager {
 
-
+    private final Random random = new Random();
 
     /**
      *  Die Hilfsmethode updateLists() nimmt die aktuell aufgedeckte Karte entgegen
@@ -29,17 +31,17 @@ public class CardManager {
     }
 
 
-    /*
+    /**
     * Die Hilfsmethode cardIsAvailable() gibt an, ob die übergebene Karte noch auf der Hand liegt.
     */
-    boolean cardIsAvailable(ArrayList<Integer> myAvailableCards, int number) {
+    public boolean cardIsAvailable(ArrayList<Integer> myAvailableCards, int number) {
        return myAvailableCards.contains(number);
    }
 
    /**
     * Die Hilfsmethode enemyCardExists() gibt an, ob die übergebene Karte noch auf der Hand des Gegners liegt.
     */
-    boolean enemyCardExists(ArrayList<Integer> enemyAvailableCards, int number) {
+    public boolean enemyCardExists(ArrayList<Integer> enemyAvailableCards, int number) {
         return enemyAvailableCards.contains(number);
     }
 
@@ -47,9 +49,29 @@ public class CardManager {
      * Die Hilfsmethode removeCard() löscht die vom Bot zu spielende Karte aus der Hand
      * und übergibt die Karte auf die Methode, die die Hilfsmethode aufgerufen hat.
      */
-    int removeCard(ArrayList<Integer> myAvailableCards, int cardToRemove) {
+    public int removeCard(ArrayList<Integer> myAvailableCards, int cardToRemove) {
         myAvailableCards.removeIf(card -> card == cardToRemove);
         return cardToRemove;
+    }
+
+    /**
+     * In der Methode playMinCard() wird unsere niedrigste noch verfügbare Karte an die Hilfsmethode
+     * removeCard() übergeben.
+     */
+     int playMinCard(ArrayList<Integer> myAvailableCards) {
+        return removeCard(myAvailableCards, Collections.min(myAvailableCards));
+    }
+
+    /**
+     * In der Methode playMinCard() wird unsere höchste noch verfügbare Karte an die Hilfsmethode
+     * removeCard() übergeben.
+     */
+    int playMaxCard(ArrayList<Integer> myAvailableCards) {
+        return removeCard(myAvailableCards, Collections.max(myAvailableCards));
+    }
+
+    int playRandomCard(ArrayList<Integer> myAvailableCards){
+        return removeCard(myAvailableCards, myAvailableCards.get(random.nextInt(myAvailableCards.size())));
     }
 
 }

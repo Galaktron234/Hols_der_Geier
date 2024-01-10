@@ -31,25 +31,33 @@ package "Strategies" #DDDDDD{
         # cardIsAvailable(): boolean
         # enemyCardExists(): boolean
         # removeCard(): int
+        # playMinCard(): int
+        # playMaxCard(): int
     }
 
-    class AggressiveStrat
-    class DefensiveStrat
+    class AggressiveStrat{
+        + playCard():int
+     }
+    class DefensiveStrat{
+        + playCard():int
+    }
     class DynamicMappedStrat{
         + playCard():int
         - playSpecialCase1(): int
         - playSpecialCase2(): int
-        - playMinCard(): int
-        - playMaxCard(): int
     }
-
-    class RandomStrat
-    class StaticMappedStrat
+    class RandomStrat{
+        + playCard():int
+    }
+    class StaticMappedStrat{
+        - cardMapping: HashMap<Integer, Integer>
+        + playCard(): int
+    }
 }
 
 HolsDerGeierSpieler <|- AlexBotV3
 CardManager<-Astrategy
-CardManager <- AlexBotV3
+CardManager <----- AlexBotV3
 Astrategy <|-- AggressiveStrat
 Astrategy <|-- DefensiveStrat
 Astrategy <|-- DynamicMappedStrat

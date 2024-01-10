@@ -190,10 +190,13 @@ public class HolsDerGeier {
         while (!nochZuVergebendeGeierKarten.isEmpty()) {
             naechsterZug();
         }
+
         if (punktstaende[0] > punktstaende[1]) {
             return spieler[0].getClass().getSimpleName();
         }
-        else return spieler[1].getClass().getSimpleName();
+        else{
+            return spieler[1].getClass().getSimpleName();
+        }
     }
 
 }
